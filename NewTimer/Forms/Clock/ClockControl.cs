@@ -22,6 +22,7 @@ namespace NewTimer.Forms.Clock
         //Background
         private static readonly Brush FRAME_BRUSH = new SolidBrush(ColorTranslator.FromHtml("#333"));
         private static readonly Brush BG_BRUSH = new SolidBrush(ColorTranslator.FromHtml("#222"));
+        private static readonly Brush BG2_BRUSH = new SolidBrush(ColorTranslator.FromHtml("#111"));
 
         private static readonly Pen FRAME_MARK_PEN = new Pen(ColorTranslator.FromHtml("#444"), 3) { EndCap = LineCap.Round };
         private static readonly Pen FRAME_MARK_BIG_PEN = new Pen(ColorTranslator.FromHtml("#444"), 6) { EndCap = LineCap.Round };
@@ -48,7 +49,7 @@ namespace NewTimer.Forms.Clock
         private static readonly Pen PEN_DOTTED_THIN = new Pen(COLOR_HAND_WEAK, 2) { EndCap = LineCap.Round, StartCap = LineCap.Round, DashCap = DashCap.Round, DashStyle = DashStyle.Dot };
 
         //Disc settings
-        private const float DISC_INITAL_SCALE = 1 - BG_FRAME_SCALE;
+        private const float DISC_INITAL_SCALE = (1 - BG_FRAME_SCALE) * 0.95f;
         private const float DISC_DIVIDEND_INCREMENT = 0.2f;
 
         public ClockControl()
@@ -61,15 +62,24 @@ namespace NewTimer.Forms.Clock
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            OnDrawBackCircle(e);
+
+            if (Config.Target != DateTime.Now.Date)
+            {
+                OnDrawBackCircle(e);
+            }
+            
             OnDrawNumbers(e);
 
-            OnDrawSecondHand(e);
             OnDrawMinuteHand(e);
+            OnDrawSecondHand(e);
             OnDrawHourHand(e);
 
-            OnDrawSecondsLeftHand(e);
+            if (Config.Target == DateTime.Now.Date)
+            {
+                return;
+            }
             OnDrawMinutesLeftHand(e);
+            OnDrawSecondsLeftHand(e);
             OnDrawHoursLeftHand(e);
         }
 
@@ -104,7 +114,7 @@ namespace NewTimer.Forms.Clock
                 height: (int)(e.ClipRectangle.Height * (1 - BG_FRAME_SCALE))
             );
 
-            e.Graphics.FillEllipse(BG_BRUSH, nonFrameArea);
+            e.Graphics.FillEllipse(Config.TimeLeft.TotalMinutes < 1f ? BG2_BRUSH : BG_BRUSH, nonFrameArea);
         }
 
         protected virtual void OnDrawHourHand(PaintEventArgs e)
@@ -205,6 +215,17 @@ namespace NewTimer.Forms.Clock
                 e.Graphics.FillPie(color, area, -90 + startAngle, angle);
             }
 
+
+            if (Config.TimeLeft.TotalMinutes < 1f)
+            {
+                fillPie(
+                    color: BG_BRUSH,
+                    startAngle: (DateTime.Now.Second + DateTime.Now.Millisecond / 1000f) / 60f * 360f,
+                    angle: (float)Config.TimeLeft.TotalSeconds / 60f * 360f,
+                    scale: 1 - BG_FRAME_SCALE
+                );
+            }
+
             float dividend = 1f;
             for (int i = 0; i < Math.Ceiling(Config.TimeLeft.TotalHours); i++)
             {
@@ -214,7 +235,7 @@ namespace NewTimer.Forms.Clock
                     {
                         fillPie(
                             color: b, 
-                            startAngle: (DateTime.Now.Minute + DateTime.Now.Second / 60f) / 60f * 360,
+                            startAngle: (DateTime.Now.Minute + DateTime.Now.Second / 60f) / 60f * 360f,
                             angle: (float)(Config.TimeLeft.TotalMinutes % 60) / 60f * 360f, 
                             scale: DISC_INITAL_SCALE / dividend);
                     }
