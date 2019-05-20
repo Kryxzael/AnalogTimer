@@ -26,6 +26,10 @@ namespace NewTimer.Forms.Clock
             OnDrawSecondHand(e);
             OnDrawMinuteHand(e);
             OnDrawHourHand(e);
+
+            OnDrawSecondsLeftHand(e);
+            OnDrawMinutesLeftHand(e);
+            OnDrawHoursLeftHand(e);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
@@ -69,6 +73,45 @@ namespace NewTimer.Forms.Clock
             }
         }
 
+        protected virtual void OnDrawHoursLeftHand(PaintEventArgs e)
+        {
+            using (Pen hourPen = new Pen(Brushes.White, 3)
+            {
+                StartCap = System.Drawing.Drawing2D.LineCap.Round,
+                EndCap = System.Drawing.Drawing2D.LineCap.Round,
+                DashStyle = System.Drawing.Drawing2D.DashStyle.Dot
+            })
+            {
+                OnDrawHand(e, e.ClipRectangle.Width / 4, CalculateAngle((float)Config.TimeLeft.TotalHours % 12, 12), hourPen);
+            }
+        }
+
+        protected virtual void OnDrawMinutesLeftHand(PaintEventArgs e)
+        {
+            using (Pen minutePen = new Pen(Brushes.White, 3)
+            {
+                StartCap = System.Drawing.Drawing2D.LineCap.Round,
+                EndCap = System.Drawing.Drawing2D.LineCap.Round,
+                DashStyle = System.Drawing.Drawing2D.DashStyle.Dot
+            })
+            {
+                OnDrawHand(e, e.ClipRectangle.Width / 2, CalculateAngle((float)Config.TimeLeft.TotalMinutes, 60), minutePen);
+            }
+        }
+
+        protected virtual void OnDrawSecondsLeftHand(PaintEventArgs e)
+        {
+            using (Pen minutePen = new Pen(Brushes.White, 1)
+            {
+                StartCap = System.Drawing.Drawing2D.LineCap.Round,
+                EndCap = System.Drawing.Drawing2D.LineCap.Round,
+                DashStyle = System.Drawing.Drawing2D.DashStyle.Dot
+            })
+            {
+                OnDrawHand(e, e.ClipRectangle.Width / 2, CalculateAngle((float)Config.TimeLeft.TotalSeconds, 60), minutePen);
+            }
+        }
+
         protected virtual void OnDrawBackCircle(PaintEventArgs e)
         {
 
@@ -92,7 +135,7 @@ namespace NewTimer.Forms.Clock
         protected static PointF GetPointAtAngle(Point origin, int length, float angle)
         {
             return new PointF(
-                x: origin.X + (float)Math.Cos(ToRadiants(angle)) * length, 
+                x: origin.X + (float)Math.Cos(ToRadiants(angle)) * length,
                 y: origin.Y + (float)Math.Sin(ToRadiants(angle)) * length
             );
         }
