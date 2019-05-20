@@ -64,6 +64,18 @@
     <Compile Include="FormParts\Setup\KnobHour.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Forms\Clock\Clock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Clock\ClockControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Clock\FullContents.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Clock\FullContents.Designer.cs">
+      <DependentUpon>FullContents.cs</DependentUpon>
+    </Compile>
     <Compile Include="SaveFileProvider.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,6 +185,9 @@
       <DependentUpon>DaysContents.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Circle\FullContents.resx">
+      <DependentUpon>FullContents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Clock\FullContents.resx">
       <DependentUpon>FullContents.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TimerFormBase.resx">

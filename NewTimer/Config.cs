@@ -207,7 +207,7 @@ namespace NewTimer
             ColorizeTimerBar();
 
             //Show main form
-            new Forms.Bar.Bar().Show();
+            new Forms.Clock.Clock().Show();
         }
 
 
