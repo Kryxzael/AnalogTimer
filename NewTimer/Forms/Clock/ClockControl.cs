@@ -22,7 +22,7 @@ namespace NewTimer.Forms.Clock
         //Background
         private static readonly Brush FRAME_BRUSH = new SolidBrush(ColorTranslator.FromHtml("#333"));
         private static readonly Brush BG_BRUSH = new SolidBrush(ColorTranslator.FromHtml("#222"));
-        private static readonly Brush BG2_BRUSH = new SolidBrush(ColorTranslator.FromHtml("#111"));
+        private static readonly Brush BG_TRUE_BRUSH = new SolidBrush(Config.GlobalBackColor);
 
         private static readonly Pen FRAME_MARK_PEN = new Pen(ColorTranslator.FromHtml("#444"), 3) { EndCap = LineCap.Round };
         private static readonly Pen FRAME_MARK_BIG_PEN = new Pen(ColorTranslator.FromHtml("#444"), 6) { EndCap = LineCap.Round };
@@ -124,7 +124,7 @@ namespace NewTimer.Forms.Clock
                 height: (int)(e.ClipRectangle.Height * (1 - BG_FRAME_SCALE))
             );
 
-            e.Graphics.FillEllipse(Config.TimeLeft.TotalMinutes < 1f ? BG2_BRUSH : BG_BRUSH, nonFrameArea);
+            e.Graphics.FillEllipse(Config.RealTimeLeft.TotalMinutes < 1f ? BG_TRUE_BRUSH : BG_BRUSH, nonFrameArea);
         }
 
         protected virtual void OnDrawHourHand(PaintEventArgs e)
@@ -226,12 +226,12 @@ namespace NewTimer.Forms.Clock
             }
 
 
-            if (Config.TimeLeft.TotalMinutes < 1f)
+            if (Config.TimeLeft.TotalMinutes < 1f && !Config.Overtime)
             {
                 fillPie(
                     color: BG_BRUSH,
                     startAngle: (DateTime.Now.Second + DateTime.Now.Millisecond / 1000f) / 60f * 360f,
-                    angle: (float)Config.TimeLeft.TotalSeconds / 60f * 360f,
+                    angle: (float)Config.RealTimeLeft.TotalSeconds / 60f * 360f,
                     scale: 1 - BG_FRAME_SCALE
                 );
             }
@@ -246,7 +246,7 @@ namespace NewTimer.Forms.Clock
                         fillPie(
                             color: b, 
                             startAngle: (DateTime.Now.Minute + DateTime.Now.Second / 60f) / 60f * 360f,
-                            angle: (float)(Config.TimeLeft.TotalMinutes % 60) / 60f * 360f, 
+                            angle: (float)(Config.RealTimeLeft.TotalMinutes % 60) / 60f * 360f, 
                             scale: DISC_INITAL_SCALE / dividend);
                     }
                     else
