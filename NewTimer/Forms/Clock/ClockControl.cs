@@ -33,10 +33,15 @@ namespace NewTimer.Forms.Clock
         private const float MINUTE_HAND_SCALE = 1 - BG_FRAME_SCALE;
         private const float SECOND_HAND_SCALE = MINUTE_HAND_SCALE;
 
-        private const float NUMBER_HOUR_DISTANCE_SCALE = 0.4f;
-        private const float NUMBER_MINUTE_DISTANCE_SCALE = 0.7f;
-        private const float NUMBER_SECOND_DISTANCE_SCALE = NUMBER_MINUTE_DISTANCE_SCALE;
-        private const float FONT_SIZE = 28f;
+        private const float NUMBER_HOUR_DISTANCE_SCALE = 0.3f;
+        private const float NUMBER_MINUTE_DISTANCE_SCALE = 0.5f;
+        private const float NUMBER_SECOND_DISTANCE_SCALE = 0.7f;
+
+        private const float NUMBER_HOUR_DEGREE_OFFSET = -25f;
+        private const float NUMBER_MINUTE_DEGREE_OFFSET = -20f;
+        private const float NUMBER_SECOND_DEGREE_OFFSET = -15f;
+
+        private const float FONT_SIZE = 22f;
 
         //Hand and number colors
         private static readonly Color COLOR_HAND = ColorTranslator.FromHtml("#BBB");
@@ -276,7 +281,7 @@ namespace NewTimer.Forms.Clock
                 PointF p = GetPointAtAngle(
                     origin: center,
                     length: (int)(NUMBER_HOUR_DISTANCE_SCALE * e.ClipRectangle.Width / 2),
-                    angle: CalculateAngle(DateTime.Now.Hour % 12 + DateTime.Now.Minute / 60f, 12)
+                    angle: CalculateAngle(DateTime.Now.Hour % 12 + DateTime.Now.Minute / 60f, 12) + NUMBER_HOUR_DEGREE_OFFSET
                 );
 
                 byte s = (byte)(Math.Min(byte.MaxValue, Math.Max((Config.TimeLeft.TotalHours - 1), 0) / (1 / 6f) * byte.MaxValue));
@@ -296,9 +301,9 @@ namespace NewTimer.Forms.Clock
             //Draw number at minute hand
             {
                 PointF p = GetPointAtAngle(
-                    origin: center, 
-                    length: (int)(NUMBER_MINUTE_DISTANCE_SCALE * e.ClipRectangle.Width / 2), 
-                    angle: CalculateAngle(DateTime.Now.Minute + DateTime.Now.Second / 60f, 60)
+                    origin: center,
+                    length: (int)(NUMBER_MINUTE_DISTANCE_SCALE * e.ClipRectangle.Width / 2),
+                    angle: CalculateAngle(DateTime.Now.Minute + DateTime.Now.Second / 60f, 60) + NUMBER_MINUTE_DEGREE_OFFSET
                 );
 
                 byte s = (byte)(Math.Min(byte.MaxValue, Math.Max((Config.TimeLeft.TotalMinutes - 1), 0) / 5f * byte.MaxValue));
@@ -320,7 +325,7 @@ namespace NewTimer.Forms.Clock
                 PointF p = GetPointAtAngle(
                     origin: center,
                     length: (int)(NUMBER_SECOND_DISTANCE_SCALE * e.ClipRectangle.Width / 2),
-                    angle: CalculateAngle(DateTime.Now.Second + DateTime.Now.Millisecond / 1000f, 60)
+                    angle: CalculateAngle(DateTime.Now.Second + DateTime.Now.Millisecond / 1000f, 60) + NUMBER_SECOND_DEGREE_OFFSET
                 );
 
                 byte s = (byte)(Config.RealTimeLeft.Milliseconds / 1000f * 255);
