@@ -33,12 +33,18 @@ namespace NewTimer.Forms.Clock
         private const float MINUTE_HAND_SCALE = 1 - BG_FRAME_SCALE;
         private const float SECOND_HAND_SCALE = MINUTE_HAND_SCALE;
 
-        //Hand colors
+        private const float NUMBER_HOUR_DISTANCE_SCALE = 0.4f;
+        private const float NUMBER_MINUTE_DISTANCE_SCALE = 0.7f;
+        private const float NUMBER_SECOND_DISTANCE_SCALE = NUMBER_MINUTE_DISTANCE_SCALE;
+        private const float FONT_SIZE = 28f;
+
+        //Hand and number colors
         private static readonly Color COLOR_HAND = ColorTranslator.FromHtml("#BBB");
         private static readonly Color COLOR_HAND_WEAK = ColorTranslator.FromHtml("#888");
         private static readonly Color COLOR_HAND_BORDER = ColorTranslator.FromHtml("#222");
+        private static readonly Color COLOR_NUMBER = ColorTranslator.FromHtml("#444");
 
-        //Hand pens
+        //Hand and number pens and brushes
         private static readonly Pen PEN_BORDER_NORMAL = new Pen(COLOR_HAND_BORDER, 7) { EndCap = LineCap.Round, StartCap = LineCap.Round };
         private static readonly Pen PEN_FILL_NORMAL = new Pen(COLOR_HAND, 5) { EndCap = LineCap.Round, StartCap = LineCap.Round };
 
@@ -47,6 +53,8 @@ namespace NewTimer.Forms.Clock
 
         private static readonly Pen PEN_DOTTED = new Pen(COLOR_HAND_WEAK, 4) { EndCap = LineCap.Round, StartCap = LineCap.Round, DashCap = DashCap.Round, DashStyle = DashStyle.Dot };
         private static readonly Pen PEN_DOTTED_THIN = new Pen(COLOR_HAND_WEAK, 2) { EndCap = LineCap.Round, StartCap = LineCap.Round, DashCap = DashCap.Round, DashStyle = DashStyle.Dot };
+
+        private static readonly Brush BRUSH_NUMBER = new SolidBrush(COLOR_NUMBER);
 
         //Disc settings
         private const float DISC_INITAL_SCALE = (1 - BG_FRAME_SCALE) * 0.95f;
@@ -57,6 +65,8 @@ namespace NewTimer.Forms.Clock
             DoubleBuffered = true;
             SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             _colors = Config.ColorScheme.GenerateMany(24, Config.MasterRandom).ToArray();
+
+            Font = new Font(DefaultFont.FontFamily, FONT_SIZE);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -256,6 +266,76 @@ namespace NewTimer.Forms.Clock
 
         protected virtual void OnDrawNumbers(PaintEventArgs e)
         {
+            Point center = new Point(
+                x : e.ClipRectangle.Left + (e.ClipRectangle.Right / 2),
+                y: e.ClipRectangle.Top + (e.ClipRectangle.Bottom / 2)
+            );
+
+            //Draw number at hour hand
+            {
+                PointF p = GetPointAtAngle(
+                    origin: center,
+                    length: (int)(NUMBER_HOUR_DISTANCE_SCALE * e.ClipRectangle.Width / 2),
+                    angle: CalculateAngle(DateTime.Now.Hour % 12 + DateTime.Now.Minute / 60f, 12)
+                );
+
+                byte s = (byte)(Math.Min(byte.MaxValue, Math.Max((Config.TimeLeft.TotalHours - 1), 0) / (1 / 6f) * byte.MaxValue));
+                using (Brush brush = new SolidBrush(Color.FromArgb(s, Color.White)))
+                {
+                    e.Graphics.DrawString(
+                        s: Config.TimeLeft.Hours.ToString(),
+                        font: Font,
+                        brush: brush,
+                        point: p,
+                        format: new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }
+                    );
+                }
+            }
+
+
+            //Draw number at minute hand
+            {
+                PointF p = GetPointAtAngle(
+                    origin: center, 
+                    length: (int)(NUMBER_MINUTE_DISTANCE_SCALE * e.ClipRectangle.Width / 2), 
+                    angle: CalculateAngle(DateTime.Now.Minute + DateTime.Now.Second / 60f, 60)
+                );
+
+                byte s = (byte)(Math.Min(byte.MaxValue, Math.Max((Config.TimeLeft.TotalMinutes - 1), 0) / 5f * byte.MaxValue));
+                using (Brush brush = new SolidBrush(Color.FromArgb(s, Color.White)))
+                {
+                    e.Graphics.DrawString(
+                        s: Config.TimeLeft.Minutes.ToString("00"),
+                        font: Font,
+                        brush: brush,
+                        point: p,
+                        format: new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }
+                    );
+                }
+            }
+
+
+            //Draw number at second hand
+            {
+                PointF p = GetPointAtAngle(
+                    origin: center,
+                    length: (int)(NUMBER_SECOND_DISTANCE_SCALE * e.ClipRectangle.Width / 2),
+                    angle: CalculateAngle(DateTime.Now.Second + DateTime.Now.Millisecond / 1000f, 60)
+                );
+
+                byte s = (byte)(Config.RealTimeLeft.Milliseconds / 1000f * 255);
+                using (Brush brush = new SolidBrush(Color.FromArgb(s, Color.White)))
+                {
+                    e.Graphics.DrawString(
+                        s: Config.TimeLeft.Seconds.ToString("00"),
+                        font: Font,
+                        brush: brush,
+                        point: p,
+                        format: new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }
+                    );
+                }
+            }
+
 
         }
 
