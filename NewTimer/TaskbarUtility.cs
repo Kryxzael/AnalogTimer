@@ -80,7 +80,7 @@ namespace NewTimer
             }
 
             //Buffer for storing precalculated values
-            double v = 60 - tl.Hours;
+            double v = 60 - tl.Minutes;
 
             //1m -> red, yellow and green
             if (tl.TotalMinutes < 1)
