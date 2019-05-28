@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewTimer", "NewTimer\NewTimer.csproj", "{39291476-881E-41AB-B2BB-EE0ED55C904E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnalogTimer", "NewTimer\AnalogTimer.csproj", "{39291476-881E-41AB-B2BB-EE0ED55C904E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CleanNodeTree", "CleanNodeTree\CleanNodeTree\CleanNodeTree.csproj", "{C848CFA6-3EDE-4EC8-847D-E5149B3D1753}"
 EndProject
