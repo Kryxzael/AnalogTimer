@@ -77,6 +77,7 @@ namespace NewTimer.Forms.Clock
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
             if (Config.Target != DateTime.Now.Date)
             {
