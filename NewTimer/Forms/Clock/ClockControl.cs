@@ -25,6 +25,7 @@ namespace NewTimer.Forms.Clock
         private static readonly Brush BG_TRUE_BRUSH = new SolidBrush(Config.GlobalBackColor);
 
         private static readonly Pen FRAME_MARK_PEN = new Pen(ColorTranslator.FromHtml("#444"), 3) { EndCap = LineCap.Round };
+        private static readonly Pen FRAME_MARK_SMALL_PEN = new Pen(ColorTranslator.FromHtml("#444"), 1.5f) { EndCap = LineCap.Round };
         private static readonly Pen FRAME_MARK_BIG_PEN = new Pen(ColorTranslator.FromHtml("#444"), 6) { EndCap = LineCap.Round };
 
         //Scales
@@ -113,12 +114,21 @@ namespace NewTimer.Forms.Clock
             );
             int radius = e.ClipRectangle.Width / 2;
 
+            for (int i = 0; i < 60; i++)
+            {
+                e.Graphics.DrawLine(
+                    pen: FRAME_MARK_SMALL_PEN,
+                    pt1: center,
+                    pt2: GetPointAtAngle(center, (int)(radius * 0.96f), i / 60f * 360f)
+                );
+            }
+
             for (int i = 0; i < 12; i++)
             {
                 e.Graphics.DrawLine(
                     pen: i % 3 == 0 ? FRAME_MARK_BIG_PEN : FRAME_MARK_PEN,
                     pt1: center,
-                    pt2: GetPointAtAngle(center, radius, i / 12f * 360f)
+                    pt2: GetPointAtAngle(center, (int)(radius * 0.98f), i / 12f * 360f)
                 );
             }
 
