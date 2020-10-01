@@ -46,13 +46,13 @@ namespace NewTimer.Forms.Clock
 
         //Hand and number colors
         private static readonly Color COLOR_HAND = ColorTranslator.FromHtml("#BBB");
-        private static readonly Color COLOR_HAND_WEAK = ColorTranslator.FromHtml("#888");
+        private static readonly Color COLOR_HAND_WEAK = ColorTranslator.FromHtml("#555");
         private static readonly Color COLOR_HAND_BORDER = ColorTranslator.FromHtml("#222");
         private static readonly Color COLOR_NUMBER = ColorTranslator.FromHtml("#444");
 
         //Hand and number pens and brushes
-        private static readonly Pen PEN_BORDER_NORMAL = new Pen(COLOR_HAND_BORDER, 7) { EndCap = LineCap.Round, StartCap = LineCap.Round };
-        private static readonly Pen PEN_FILL_NORMAL = new Pen(COLOR_HAND, 5) { EndCap = LineCap.Round, StartCap = LineCap.Round };
+        private static readonly Pen PEN_BORDER_NORMAL = new Pen(COLOR_HAND_BORDER, 7) { EndCap = LineCap.ArrowAnchor, StartCap = LineCap.Round };
+        private static readonly Pen PEN_FILL_NORMAL = new Pen(COLOR_HAND, 5) { EndCap = LineCap.ArrowAnchor, StartCap = LineCap.Round };
 
         private static readonly Pen PEN_BORDER_THIN = new Pen(COLOR_HAND_BORDER, 4) { EndCap = LineCap.Round, StartCap = LineCap.Round };
         private static readonly Pen PEN_FILL_THIN = new Pen(COLOR_HAND, 2) { EndCap = LineCap.Round, StartCap = LineCap.Round };
