@@ -63,6 +63,15 @@ namespace NewTimer.Forms
             chk24h.Checked = Properties.Settings.Default.use24h;
         }
 
+        protected override void OnShown(EventArgs e)
+        {
+            MessageBox.Show(
+                "This application is obsolete.\r\n" +
+                "It still works, but it will not be maintained.\r\n" +
+                "Check out the sister project NewTimer instead as this application's functionality has been merged to that one."
+            );
+        }
+
         /// <summary>
         /// Gets the selected color scheme
         /// </summary>
